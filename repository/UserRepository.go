@@ -1,40 +1,38 @@
 package repository
 
-import(
-	"database/sql"
+import (
 	"blog/model"
+	"database/sql"
 	"errors"
 )
 
+func GetAllUsers(db *sql.DB, page int, limit int) ([]model.User, int, error) {
 
-func GetAllUsers(db *sql.DB, page int, limit int) ([]model.User, error) {
-	
 	total, err := CountTotalUsers(db)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	if page > total {
-		return nil, errors.New("page out of range")
+		return nil, 0, errors.New("page out of range")
 	}
-	
+
 	query := `select u."userId", u."userName", u."password", u."role", u."createdAt", u."updatedAt" from "user" u where u."deletedAt" is null limit 9 offset 3`
 	result, err := db.Query(query)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	slicesUsers := make([]model.User, 0)
 	for result.Next() {
 		var user model.User
 		err = result.Scan(&user.UserId, &user.UserName, &user.Password, &user.CreateAt, &user.UpdateAt)
 		if err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 		slicesUsers = append(slicesUsers, user)
 	}
-	return slicesUsers, nil
+	return slicesUsers, total, nil
 }
-
 
 func CountTotalUsers(db *sql.DB) (int, error) {
 	var count int
