@@ -2,44 +2,64 @@ package service
 
 import (
 	"blog/model"
+	"blog/repository"
+	"errors"
+	"strconv"
+
+	"gorm.io/gorm"
 )
 
 type viewuser struct {
-	Total      int          `json:"total"`
-	Limit      int          `json:"limit"`
-	Curencpage int          `json:"curencpage"`
-	Users      []model.User `json:"Users"`
+	Total       int          `json:"total"`
+	Limit       int          `json:"limit"`
+	CurencePage int          `json:"curence page"`
+	Users       []model.User `json:"Users"`
 }
 
-// func GetUserService(db *sql.DB, userName string, sLimit string, sPage string) (viewuser, error){
-// 	if sPage == "" {
-// 		sPage = "1"
-// 	}
-// 	if sLimit == "" {
-// 		sLimit = "9"
-// 	}
-// 	if userName == "" {
-// 		userName = "%"
-// 	} else {
-// 		userName = "%" + userName + "%"
-// 	}
+func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string) (viewuser, error) {
+	if sPage == "" {
+		sPage = "1"
+	}
+	if sLimit == "" {
+		sLimit = "9"
+	}
+	if userName == "" {
+		userName = "%"
+	} else {
+		userName = "%" + userName + "%"
+	}
 
-// 	iLimit, err := strconv.Atoi(sLimit)
-// 	if err != nil{
-// 		return viewuser{}, errors.New("Invalid limit value")
-// 	}
-// 	iPage, err := strconv.Atoi(sPage)
-// 	if err != nil{
-// 		return viewuser{}, errors.New("Invalid page value")
-// 	}
+	iLimit, err := strconv.Atoi(sLimit)
+	if err != nil {
+		return viewuser{}, errors.New("invalid limit value")
+	}
+	iPage, err := strconv.Atoi(sPage)
+	if err != nil {
+		return viewuser{}, errors.New("invalid page value")
+	}
 
-// 	slicesUser, count, err := repository.GetAllUsers(db, iPage, iLimit)
+	//log.Println("from service " + userName )
 
-// 	viewUser := viewuser{
-// 		Total: count,
-// 		Limit: iLimit,
-// 		Curencpage: iPage,
-// 		Users: slicesUser,
-// 	}
-// 	return viewUser, nil
-// }
+	total, err := repository.CountTotalUsers(db, userName)
+
+	if err != nil {
+		return viewuser{}, err
+	}
+
+	if ((iPage - 1) * iLimit) > int(total) {
+		iPage = 1
+	}
+
+	slicesUser, err := repository.GetAllUsers(db, iPage, iLimit, userName)
+	if err != nil {
+		return viewuser{}, err
+	}
+
+	viewUser := viewuser{
+		Total:       int(total),
+		Limit:       iLimit,
+		CurencePage: iPage,
+		Users:       slicesUser,
+	}
+	return viewUser, nil
+}

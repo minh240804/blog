@@ -5,10 +5,10 @@ type Blog struct{
 	BlogTitle   string 	`json:"blogTitle"`
 	BlogContent string 	`json:"blogContent"`
 
-	CategoryId int		`json:categoryId`	
+	CategoryId int		`json:"category_id"`	
 	Category   Category `gorm:"foreignKey:CategoryId"`
 
-	AuthorId int		`json:authorId`
+	AuthorId int		`json:"author_id"`
 	Author   User `gorm:"foreignKey:AuthorId"`
 }
 

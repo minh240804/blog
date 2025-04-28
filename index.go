@@ -15,6 +15,5 @@ func main() {
 		log.Print("connect complete")
 	}
 	// defer model.DB.Close()
-
 	router.InitRouter()
 }
