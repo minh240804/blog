@@ -1,33 +1,59 @@
 package model
 
 import (
-	"database/sql"
-	"fmt"
+
+	// "fmt"
+
 	_ "github.com/lib/pq"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "123"
-	dbname   = "DemoBlog"
-)
+// const (
+// 	host     = "localhost"
+// 	port     = 5432
+// 	user     = "postgres"
+// 	password = "123"
+// 	dbname   = "DemoBlog"
+// )
 
-var DB *sql.DB
+var DB *gorm.DB
 
 func DbConnect() error {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-
+	var err error
+	dsn := "host=localhost user=postgres password=123 dbname=GROM_Test port=5432 sslmode=disable TimeZone='UTC+7'"
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return err
 	}
-	if err = db.Ping(); err != nil {
-		defer db.Close()
+	return migrateBlog(DB)
+}
+
+func migrateBlog(db *gorm.DB) error {
+	err := db.AutoMigrate(&User{})
+	if err!= nil{ 
 		return err
 	}
-	DB = db
+	err = db.AutoMigrate(&Category{})
+	if err!= nil{ 
+		return err
+	}
+	err = db.AutoMigrate(&Blog{})
+	if err!= nil{ 
+		return err
+	}
+	err = db.AutoMigrate(&Comment{})
+	if err!= nil{ 
+		return err
+	}
+	err = db.AutoMigrate(&Report{})
+	if err!= nil{ 
+		return err
+	}
+	err = db.AutoMigrate(&Vote{})
+	if err!= nil{ 
+		return err
+	}
 	return nil
-
 }
