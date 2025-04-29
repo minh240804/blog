@@ -12,7 +12,7 @@ import (
 func AddUserService(db *gorm.DB, userName string, password string, role string) (string, error) {
 
 	if userName == "" || password == "" {
-		return "", errors.New("user name and password must not be empty.")
+		return "", errors.New("user name and password must not be empty")
 	}
 
 	inputUser := model.User{

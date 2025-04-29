@@ -10,13 +10,13 @@ import (
 )
 
 type viewuser struct {
-	Total       int          `json:"total"`
-	Limit       int          `json:"limit"`
-	CurencePage int          `json:"curence page"`
-	Users       []model.User `json:"Users"`
+	Total       int             `json:"total"`
+	Limit       int             `json:"limit"`
+	CurencePage int             `json:"curence page"`
+	Users       []model.APIUser `json:"Users"`
 }
 
-func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string) (viewuser, error) {
+func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string, role string) (viewuser, error) {
 	if sPage == "" {
 		sPage = "1"
 	}
@@ -27,6 +27,11 @@ func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string) (
 		userName = "%"
 	} else {
 		userName = "%" + userName + "%"
+	}
+	if role == "" {
+		role = "%"
+	} else {
+		role = "%" + role + "%"
 	}
 
 	iLimit, err := strconv.Atoi(sLimit)
@@ -50,7 +55,7 @@ func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string) (
 		iPage = 1
 	}
 
-	slicesUser, err := repository.GetAllUsers(db, iPage, iLimit, userName)
+	slicesUser, err := repository.GetAllUsers(db, iPage, iLimit, userName, role)
 	if err != nil {
 		return viewuser{}, err
 	}

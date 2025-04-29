@@ -2,16 +2,26 @@ package repository
 
 import (
 	"blog/model"
+	"errors"
 
 	"gorm.io/gorm"
 	// "github.com/pelletier/go-toml/query"
 )
 
-func GetAllUsers(db *gorm.DB, page int, limit int, userName string) ([]model.User, error) {
+func GetAllUsers(db *gorm.DB, page int, limit int, userName string, role string) ([]model.APIUser, error) {
 	// check the limitedd
-	var slicesUsers = []model.User{}
-	res := db.Where("user_name like ?", userName).Limit(limit).Offset(limit * (page - 1)).Find(&slicesUsers)
+	var slicesUsers = []model.APIUser{}
+	res := db.Model(&model.User{}).Where("user_name like ?", userName).Where("role like ?", role).Limit(limit).Offset(limit * (page - 1)).Find(&slicesUsers)
 	return slicesUsers, res.Error
+}
+
+func GetUserbyId(db *gorm.DB, id uint) (model.User, error) {
+	user := model.User{}
+	res := db.Where("id = ?", id).Find(&user)
+	if user.ID == 0{
+		return user, errors.New("user not found")
+	}
+	return user, res.Error
 }
 
 func CountTotalUsers(db *gorm.DB, userName string) (int64, error) {
@@ -29,6 +39,16 @@ func AddUser(db *gorm.DB, user model.User) (int64, error) {
 	}
 	res := db.Create(&user)
 
+	return res.RowsAffected, res.Error
+}
+
+func UpdateUser(db *gorm.DB, user model.User) (int64, error) {
+	res := db.Save(&user)
+	return res.RowsAffected, res.Error
+}
+
+func DeleteUser(db *gorm.DB, user model.User) (int64, error) {
+	res := db.Delete(user)
 	return res.RowsAffected, res.Error
 }
 

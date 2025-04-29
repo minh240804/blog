@@ -22,7 +22,7 @@ var DB *gorm.DB
 
 func DbConnect() error {
 	var err error
-	dsn := "host=localhost user=postgres password=123 dbname=GROM_Test port=5432 sslmode=disable TimeZone='UTC+7'"
+	dsn := "host=localhost user=postgres password=123 dbname=BlogFinal port=5432 sslmode=disable TimeZone='UTC+7'"
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return err
@@ -32,27 +32,27 @@ func DbConnect() error {
 
 func migrateBlog(db *gorm.DB) error {
 	err := db.AutoMigrate(&User{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	err = db.AutoMigrate(&Category{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	err = db.AutoMigrate(&Blog{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	err = db.AutoMigrate(&Comment{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	err = db.AutoMigrate(&Report{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	err = db.AutoMigrate(&Vote{})
-	if err!= nil{ 
+	if err != nil {
 		return err
 	}
 	return nil
