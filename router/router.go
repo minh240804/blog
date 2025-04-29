@@ -17,6 +17,10 @@ func InitRouter() *gin.Engine {
 	router.PUT("/user", authorize.BasicAuthAdmin, controller.UppdateUser)
 	router.DELETE("/user", authorize.BasicAuthAdmin, controller.DeleteUser)
 	router.PATCH("/user", authorize.BasicAuthAdmin, controller.Decentralization)
+
+	router.GET("/category", controller.SelectCategory)
+	router.POST("/category", authorize.BasicAuthAdmin, controller.AddCategory)
+
 	router.Run("localhost:8080")
 
 	return router
