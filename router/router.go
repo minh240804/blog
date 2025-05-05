@@ -1,27 +1,26 @@
 package router
 
 import (
-	"blog/authorize"
-	"blog/controller"
-
-	//"blog/authorize"
-
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter(config string) *gin.Engine {
+
+	if config == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		gin.SetMode(gin.DebugMode)
+	}
+
 	router := gin.Default()
 
-	router.GET("/user", authorize.BasicAuthAdmin, controller.SelectUser)
-	router.POST("/user", authorize.BasicAuthAdmin, controller.AddUser)
-	router.PUT("/user", authorize.BasicAuthAdmin, controller.UppdateUser)
-	router.DELETE("/user", authorize.BasicAuthAdmin, controller.DeleteUser)
-	router.PATCH("/user", authorize.BasicAuthAdmin, controller.Decentralization)
+	v1 := router.Group("/user")
+	addUserRoutes(v1)
 
-	router.GET("/category", controller.SelectCategory)
-	router.POST("/category", authorize.BasicAuthAdmin, controller.AddCategory)
+	v2 := router.Group("/category")
+	addCategoryRoutes(v2)
 
-	router.Run("localhost:8080")
-
+	v3 := router.Group("/blog")
+	addBlogRoutes(*v3)
 	return router
 }

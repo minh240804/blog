@@ -4,7 +4,6 @@ import (
 	"blog/model"
 	"blog/repository"
 	"errors"
-	"log"
 	"strconv"
 
 	"gorm.io/gorm"
@@ -26,7 +25,7 @@ func UpdateUserService(db *gorm.DB, userName string, password string, role strin
 		return "", err
 	}
 
-	log.Println("user found: " + strconv.Itoa(int(UpdateUser.ID)))
+	//log.Println("user found: " + strconv.Itoa(int(UpdateUser.ID)))
 
 	if userName != "" {
 		UpdateUser.UserName = userName

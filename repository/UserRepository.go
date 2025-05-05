@@ -26,8 +26,8 @@ func GetUserbyId(db *gorm.DB, id uint) (model.User, error) {
 
 func CountTotalUsers(db *gorm.DB, userName string) (int64, error) {
 	var count int64
-	db.Model(&model.User{}).Where("user_name like ?", userName).Count(&count)
-	return count, nil
+	res := db.Model(&model.User{}).Where("user_name like ?", userName).Count(&count)
+	return count, res.Error
 }
 
 func AddUser(db *gorm.DB, user model.User) (int64, error) {
@@ -57,4 +57,11 @@ func GetAdmin(db *gorm.DB) ([]model.User, error) {
 	res := db.Where(&model.User{Role: "admin"}).Find(&slicesAdmin)
 
 	return slicesAdmin, res.Error
+}
+
+func GetCensor(db *gorm.DB) ([]model.User, error){
+	var slicesCensor = []model.User{}
+	res := db.Where(&model.User{Role: "admin"}).Or(&model.User{Role: "censor"}).Find(&slicesCensor)
+
+	return slicesCensor, res.Error
 }

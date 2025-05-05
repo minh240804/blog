@@ -23,11 +23,40 @@ func SelectCategory(context *gin.Context) {
 	context.IndentedJSON(200, viewUser)
 }
 
-func AddCategory(context *gin.Context){
+func AddCategory(context *gin.Context) {
 	category := context.PostForm("category")
 	description := context.PostForm("description")
 
 	message, err := service.AddCategoryService(model.DB, category, description)
+
+	if err != nil {
+		context.IndentedJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	context.IndentedJSON(201, message)
+}
+
+func UpdateCategory(context *gin.Context) {
+	category := context.PostForm("category")
+	description := context.PostForm("description")
+	id := context.PostForm("categoryId")
+
+	message, err := service.UpdateCategory(model.DB, id, category, description)
+
+	if err != nil {
+		context.IndentedJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	context.IndentedJSON(201, message)
+}
+
+
+func DeleteCategory(context *gin.Context) {
+	id := context.Request.URL.Query().Get("id")
+
+	message, err := service.DeleteCategoryService(model.DB, id)
 
 	if err != nil {
 		context.IndentedJSON(http.StatusBadRequest, err.Error())

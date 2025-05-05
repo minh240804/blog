@@ -3,6 +3,7 @@ package main
 import (
 	"blog/model"
 	"blog/router"
+
 	//"fmt"
 	"log"
 )
@@ -15,5 +16,7 @@ func main() {
 		log.Print("connect complete")
 	}
 	// defer model.DB.Close()
-	router.InitRouter()
+
+	rout := router.InitRouter("debug")
+	rout.Run("localhost:8080")
 }
