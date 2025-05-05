@@ -10,4 +10,6 @@ import (
 func addBlogRoutes(rg gin.RouterGroup) {
 
 	rg.POST("/", authorize.BasicAuthLogin, controller.AddBlog)
+	rg.PUT("/", authorize.BasicAuthLogin, controller.UpdateBlog)
+	rg.DELETE("/", authorize.BasicAuthLogin, controller.DeleteBlog)
 }

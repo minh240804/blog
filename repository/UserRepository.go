@@ -47,9 +47,11 @@ func UpdateUser(db *gorm.DB, user model.User) (int64, error) {
 	return res.RowsAffected, res.Error
 }
 
-func DeleteUser(db *gorm.DB, user model.User) (int64, error) {
-	res := db.Delete(user)
-	return res.RowsAffected, res.Error
+func DeleteUser(db *gorm.DB, user model.User) (uint, error) {
+	if err := db.Delete(&user).Error; err != nil {
+		return 0, err
+	}
+	return user.ID, nil
 }
 
 func GetAdmin(db *gorm.DB) ([]model.User, error) {

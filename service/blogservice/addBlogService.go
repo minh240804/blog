@@ -29,6 +29,7 @@ func AddBlogService(db *gorm.DB, blogName string, content string, category strin
 		BlogContent: content,
 		CategoryId: iId,
 		AuthorId: iAuthorId,
+		Status: "pending",
 	}
 
 	_,err = repository.AddBlog(model.DB, blog)
