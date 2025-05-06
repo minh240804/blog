@@ -44,3 +44,9 @@ func GetAllCategories(db *gorm.DB, page int, limit int, name string) ([]model.Ca
 	res := db.Model(&model.Category{}).Where("category_name like ?", name).Limit(limit).Offset(limit * (page - 1)).Find(&sliceCategories)
 	return sliceCategories, res.Error
 }
+
+func GetAllApiCategory(db *gorm.DB) ([]model.ApiCategory, error) {
+	var sliceCategories = []model.ApiCategory{}
+	res := db.Model(&model.Category{}).Find(&sliceCategories)
+	return sliceCategories, res.Error
+}

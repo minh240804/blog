@@ -3,9 +3,9 @@ package model
 import "time"
 
 type User struct {
-	GormModel
+	GormModel `json:"-"`
 	UserName string `json:"user_name" gorm:"unique"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	Role     string `json:"role"`
 }
 

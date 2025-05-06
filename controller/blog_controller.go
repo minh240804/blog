@@ -55,3 +55,17 @@ func DeleteBlog(context *gin.Context){
 }
 
 
+func GetGuestBlog(context *gin.Context){
+	limit := context.Request.URL.Query().Get("_limit")
+	page := context.Request.URL.Query().Get("_page")
+	categoryName := context.Request.URL.Query().Get("category")
+	blogName := context.Request.URL.Query().Get("blog")
+
+	message, err := service.GetGuestBlogServcie(limit, page, blogName, categoryName)
+	
+	if err != nil {
+		context.IndentedJSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	context.IndentedJSON(200, message)
+}
