@@ -13,7 +13,7 @@ type viewuser struct {
 	Total       int             `json:"total"`
 	Limit       int             `json:"limit"`
 	CurencePage int             `json:"curence page"`
-	Users       []model.APIUser `json:"Users"`
+	Users       []model.User 	`json:"Users"`
 }
 
 func GetUserService(db *gorm.DB, userName string, sLimit string, sPage string, role string) (viewuser, error) {

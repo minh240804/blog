@@ -8,10 +8,10 @@ import (
 	// "github.com/pelletier/go-toml/query"
 )
 
-func GetAllUsers(db *gorm.DB, page int, limit int, userName string, role string) ([]model.APIUser, error) {
+func GetAllUsers(db *gorm.DB, page int, limit int, userName string, role string) ([]model.User, error) {
 	// check the limitedd
-	var slicesUsers = []model.APIUser{}
-	res := db.Model(&model.User{}).Where("user_name like ?", userName).Where("role like ?", role).Limit(limit).Offset(limit * (page - 1)).Find(&slicesUsers)
+	var slicesUsers = []model.User{}
+	res := db.Where("user_name like ?", userName).Where("role like ?", role).Limit(limit).Offset(limit * (page - 1)).Find(&slicesUsers)
 	return slicesUsers, res.Error
 }
 

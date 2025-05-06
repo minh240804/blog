@@ -24,7 +24,7 @@ func AddBlog(context *gin.Context) {
 	context.IndentedJSON(201, message)
 }
 
-func UpdateBlog(context *gin.Context){
+func UpdateBlog(context *gin.Context) {
 	title := context.PostForm("title")
 	content := context.PostForm("content")
 	category := context.PostForm("category")
@@ -41,7 +41,7 @@ func UpdateBlog(context *gin.Context){
 	context.IndentedJSON(201, message)
 }
 
-func DeleteBlog(context *gin.Context){
+func DeleteBlog(context *gin.Context) {
 	author := context.PostForm("author")
 	blog := context.PostForm("blog")
 
@@ -54,15 +54,14 @@ func DeleteBlog(context *gin.Context){
 	context.IndentedJSON(201, message)
 }
 
-
-func GetGuestBlog(context *gin.Context){
+func GetGuestBlog(context *gin.Context) {
 	limit := context.Request.URL.Query().Get("_limit")
 	page := context.Request.URL.Query().Get("_page")
 	categoryName := context.Request.URL.Query().Get("category")
 	blogName := context.Request.URL.Query().Get("blog")
 
-	message, err := service.GetGuestBlogServcie(limit, page, blogName, categoryName)
-	
+	message, err := service.GetGuestBlogListServcie(limit, page, blogName, categoryName)
+
 	if err != nil {
 		context.IndentedJSON(http.StatusBadRequest, err.Error())
 		return

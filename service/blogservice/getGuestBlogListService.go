@@ -15,7 +15,7 @@ type viewBlogList struct {
 	Category    []model.ApiCategory `json:"category"`
 }
 
-func GetGuestBlogServcie(sLimit string, sPage string, blogName string, category string) (viewBlogList, error) {
+func GetGuestBlogListServcie(sLimit string, sPage string, blogName string, category string) (viewBlogList, error) {
 	if sPage == "" {
 		sPage = "1"
 	}

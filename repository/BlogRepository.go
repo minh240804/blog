@@ -52,3 +52,22 @@ func GetAllBlog(db *gorm.DB, name string, category string, page int, limit int) 
 			Find(&slicesBlog).Error
 	return slicesBlog, err
 }
+
+func GetAllPublictedBlog(db *gorm.DB, name string, category string, page int, limit int) ([]model.Blog, error) {
+	// var slicesBlog = []model.ApiBlog{}
+	// res := db.Preload("Author").Model(&model.Blog{}).Where("blog_title like ?", name). /*category*/ Limit(limit).Offset(limit * (page - 1)).Find(&slicesBlog)
+	// return slicesBlog, res.Error
+
+	var slicesBlog = []model.Blog{}
+	err := db.
+			Preload("Author").
+			// Preload("Comments").
+			// Preload("Vote").
+			Model(&model.Blog{}).
+			Where("blog_title like ?", name).
+			Where("status like ?", "public").
+			Limit(limit).
+			Offset(limit * (page - 1)).
+			Find(&slicesBlog).Error
+	return slicesBlog, err
+}
